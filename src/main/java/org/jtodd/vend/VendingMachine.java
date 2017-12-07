@@ -12,4 +12,8 @@ public class VendingMachine {
             return false;
         }
     }
+
+    public String getDisplay() {
+        return "INSERT COIN";
+    }
 }

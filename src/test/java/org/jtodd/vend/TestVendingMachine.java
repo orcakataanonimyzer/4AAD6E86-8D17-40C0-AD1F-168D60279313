@@ -26,4 +26,10 @@ public class TestVendingMachine {
         Assert.assertFalse("Vending machine should not have accepted invalid coin", machine.accept(halfDollar));
         Assert.assertFalse("Vending machine should not have accepted invalid coin", machine.accept(dollar));
     }
+
+    @Test
+    public void testDisplayWhenNoCoinsHaveBeenInserted() {
+        VendingMachine machine = new VendingMachine();
+        Assert.assertEquals("Wrong starting display given", "INSERT COIN", machine.getDisplay());
+    }
 }
