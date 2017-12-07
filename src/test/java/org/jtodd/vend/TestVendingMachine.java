@@ -1,13 +1,20 @@
 package org.jtodd.vend;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class TestVendingMachine {
 
+    private VendingMachine machine;
+
+    @Before
+    public void setUp() {
+        machine = new VendingMachine();
+    }
+
     @Test
     public void testAcceptsValidCoin() {
-        VendingMachine machine = new VendingMachine();
         Coin nickel = new Coin(21.21, 5);
         Coin dime = new Coin(17.91, 2.268);
         Coin quarter = new Coin(24.26, 5.67);
@@ -18,7 +25,6 @@ public class TestVendingMachine {
 
     @Test
     public void testDoesNotAcceptInvalidCoin() {
-        VendingMachine machine = new VendingMachine();
         Coin penny = new Coin(19.05, 2.5);
         Coin halfDollar = new Coin(30.61, 11.34);
         Coin dollar = new Coin(26.49, 8.1);
@@ -29,7 +35,6 @@ public class TestVendingMachine {
 
     @Test
     public void testDisplayWhenNoCoinsHaveBeenInserted() {
-        VendingMachine machine = new VendingMachine();
         Assert.assertEquals("Wrong starting display given", "INSERT COIN", machine.getDisplay());
     }
 }
