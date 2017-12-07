@@ -65,4 +65,9 @@ public class TestVendingMachine {
         machine.accept(new Coin(Currency.NICKEL));
         Assert.assertEquals("$0.05", machine.getDisplay());
     }
+
+    @Test
+    public void testCoinReturnIsEmptyWhenNoCoinsAdded() {
+        Assert.assertArrayEquals(new Coin [] {}, machine.getReturnedCoins().toArray());
+    }
 }

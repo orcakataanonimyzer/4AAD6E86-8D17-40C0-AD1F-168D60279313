@@ -1,5 +1,8 @@
 package org.jtodd.vend;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class VendingMachine {
 
     private final String INSERT_COIN = "INSERT COIN";
@@ -26,5 +29,9 @@ public class VendingMachine {
 
     public String getDisplay() {
         return display;
+    }
+
+    public List<Coin> getReturnedCoins() {
+        return new ArrayList<Coin>();
     }
 }
