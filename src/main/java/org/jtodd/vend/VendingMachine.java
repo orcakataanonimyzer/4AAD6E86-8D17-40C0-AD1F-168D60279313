@@ -3,6 +3,10 @@ package org.jtodd.vend;
 public class VendingMachine {
 
     public boolean accept(Coin coin) {
-        return true;
+        if (coin.mass < 3) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
