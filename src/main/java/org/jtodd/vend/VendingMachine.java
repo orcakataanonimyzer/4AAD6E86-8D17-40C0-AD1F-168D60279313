@@ -8,10 +8,12 @@ public class VendingMachine {
     private final String INSERT_COIN = "INSERT COIN";
     private String display;
     private int depositedAmount;
+    private List<Coin> returnedCoins;
 
     public VendingMachine() {
         display = INSERT_COIN;
         depositedAmount = 0;
+        returnedCoins = new ArrayList<>();
     }
 
     public boolean accept(Coin coin) {
@@ -23,6 +25,7 @@ public class VendingMachine {
             display = String.format("$%.2f", ((double) depositedAmount / 100));
             return true;
         } else {
+            returnedCoins.add(coin);
             return false;
         }
     }
@@ -32,6 +35,6 @@ public class VendingMachine {
     }
 
     public List<Coin> getReturnedCoins() {
-        return new ArrayList<Coin>();
+        return returnedCoins;
     }
 }
