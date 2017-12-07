@@ -7,14 +7,15 @@ import java.util.Map;
 // Currency specifications from
 // https://www.usmint.gov/learn/coin-and-medal-programs/coin-specifications
 public enum Currency {
-    PENNY(19.05, 2.5),
-    NICKEL(21.21, 5.0),
-    DIME(17.91, 2.268),
-    QUARTER(24.26, 5.67),
-    HALF_DOLLAR(30.61, 11.34),
-    DOLLAR(26.49, 8.1),
-    SLUG(-1, -1);
+    PENNY(1, 19.05, 2.5),
+    NICKEL(5, 21.21, 5.0),
+    DIME(10, 17.91, 2.268),
+    QUARTER(25, 24.26, 5.67),
+    HALF_DOLLAR(50, 30.61, 11.34),
+    DOLLAR(100, 26.49, 8.1),
+    SLUG(0, -1, -1);
 
+    public final int value;
     public final double diameter;
     public final double mass;
 
@@ -28,7 +29,8 @@ public enum Currency {
         }
     }
 
-    private Currency(double diameter, double mass) {
+    private Currency(int value, double diameter, double mass) {
+        this.value = value;
         this.diameter = diameter;
         this.mass = mass;
     }

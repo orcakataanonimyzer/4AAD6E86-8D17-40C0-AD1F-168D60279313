@@ -37,4 +37,12 @@ public class TestVendingMachine {
     public void testDisplayWhenNoCoinsHaveBeenInserted() {
         Assert.assertEquals("Wrong starting display given", "INSERT COIN", machine.getDisplay());
     }
+
+    @Test
+    public void testDisplaysCorrectDepositedAmount() {
+        machine.accept(new Coin(Currency.NICKEL));
+        Assert.assertEquals("$0.05", machine.getDisplay());
+        machine.accept(new Coin(Currency.QUARTER));
+        Assert.assertEquals("$0.30", machine.getDisplay());
+    }
 }
