@@ -1,7 +1,6 @@
 package org.jtodd.vend;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 public class VendingMachine {
@@ -10,13 +9,13 @@ public class VendingMachine {
     private CurrencyAcceptor acceptor;
     private Display display;
     private int depositedAmount;
-    private List<Coin> returnedCoins;
+    private CoinReturn returnedCoins;
 
     public VendingMachine() {
         acceptor = new CurrencyAcceptor();
         display = new Display();
+        returnedCoins = new CoinReturn();
         depositedAmount = 0;
-        returnedCoins = new ArrayList<>();
     }
 
     public void accept(Coin coin) {
@@ -33,7 +32,7 @@ public class VendingMachine {
         return display.getMessage();
     }
 
-    public List<Coin> getReturnedCoins() {
-        return returnedCoins;
+    public Collection<Coin> getReturnedCoins() {
+        return returnedCoins.getReturnedCoins();
     }
 }
