@@ -17,7 +17,7 @@ public class TestDisplay {
 
     @Test
     public void testDisplayWhenNoCoinsHaveBeenInserted() {
-        Assert.assertEquals("Wrong starting display given", "INSERT COIN", display.getMessage());
+        Assert.assertEquals("Wrong starting display given", Display.INSERT_COIN, display.getMessage());
     }
 
     @Test

@@ -2,7 +2,7 @@ package org.jtodd.vend;
 
 public class Display {
 
-    private final String INSERT_COIN = "INSERT COIN";
+    public static final String INSERT_COIN = "INSERT COIN";
     private String message;
 
     public Display() {

@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Collection;
+
 public class TestVendingMachine {
 
     private VendingMachine machine;
@@ -16,11 +18,19 @@ public class TestVendingMachine {
     @Test
     public void testSimplePurchase() {
         // John wants a snack. The vending machine invites him to deposit some coins.
-        Assert.assertEquals("INSERT COIN", machine.getDisplay());
+        Assert.assertEquals(Display.INSERT_COIN, machine.getDisplay());
 
         // He checks the coin return to see if the previous customer left any coins
         // behind. They didn't.
         Assert.assertArrayEquals(new Coin [] {}, machine.getReturnedCoins().toArray());
+
+        // He tries getting a free bag of chips. The display tells him how much they
+        // cost, but the machine does not give him a product. The next time he checks
+        // the display the default message is shown.
+//        machine.select(ProductExample.CHIPS);
+//        Assert.assertEquals("Price: $0.50", machine.getDisplay());
+//        Assert.assertEquals(Display.INSERT_COIN, machine.getDisplay());
+//        Assert.assertArrayEquals(new Product[] {}, machine.getPurchasedProduct().toArray());
 
         // Fortunately, he has a pocket full of change, so he deposits some into the
         // vending machine. It tells him how much has been deposited.
@@ -31,6 +41,23 @@ public class TestVendingMachine {
         machine.accept(dime);
         machine.accept(quarter);
         Assert.assertEquals("$0.40", machine.getDisplay());
+
+        // He selects chips again, but he hasn't inserted enough money, so the display shows
+        // him the price and no product is dispensed. The next time he checks the display,
+        // it shows him how much he has deposited.
+//        machine.select(ProductExample.CHIPS);
+//        Assert.assertEquals("Price: $0.50", machine.getDisplay());
+//        Assert.assertEquals(new Product[] {}, machine.getPurchasedProduct().toArray());
+        Assert.assertEquals("$0.40", machine.getDisplay());
+
+        // He digs in his pocket and finds another dime. When he inserts it and chooses
+        // chips again, a bag of chips is dispensed and the display resets to default.
+//        machine.accept(new Coin(Currency.DIME));
+//        machine.select(ProductExample.CHIPS);
+//        Collection<Product> dispensedProduct = machine.getPurchasedProduct();
+//        Assert.assertEquals(1, dispensedProduct.size());
+//        Assert.assertEquals(ProductExample.CHIPS, dispensedProduct.get(0).type);
+//        Assert.assertEquals(Display.INSERT_COIN, machine.getDisplay());
     }
 
     @Test
