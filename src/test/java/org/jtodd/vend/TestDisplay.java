@@ -7,42 +7,24 @@ import org.junit.Test;
 public class TestDisplay {
 
     private VendingMachine machine;
+    private Display display;
 
     @Before
     public void setUp() {
         machine = new VendingMachine();
+        display = new Display();
     }
 
     @Test
     public void testDisplayWhenNoCoinsHaveBeenInserted() {
-        Assert.assertEquals("Wrong starting display given", "INSERT COIN", machine.getDisplay());
+        Assert.assertEquals("Wrong starting display given", "INSERT COIN", display.getMessage());
     }
 
     @Test
     public void testDisplaysCorrectDepositedAmount() {
-        machine.accept(new Coin(Currency.NICKEL));
-        Assert.assertEquals("$0.05", machine.getDisplay());
-        machine.accept(new Coin(Currency.QUARTER));
-        Assert.assertEquals("$0.30", machine.getDisplay());
-    }
-
-    @Test
-    public void testDisplayInsertCoinWhenInvalidCoinDeposited() {
-        machine.accept(new Coin(0.5, 0.5));
-        Assert.assertEquals("INSERT COIN", machine.getDisplay());
-    }
-
-    @Test
-    public void testDisplayInsertCoinWhenValidCoinThenInvalidCoinDeposited() {
-        machine.accept(new Coin(Currency.NICKEL));
-        machine.accept(new Coin(0.5, 0.5));
-        Assert.assertEquals("$0.05", machine.getDisplay());
-    }
-
-    @Test
-    public void testDisplaysCorrectDepositedAmountWhenInvalidCoinThenValidCoinDeposited() {
-        machine.accept(new Coin(0.5, 0.5));
-        machine.accept(new Coin(Currency.NICKEL));
-        Assert.assertEquals("$0.05", machine.getDisplay());
+        display.updateAmount(5);
+        Assert.assertEquals("$0.05", display.getMessage());
+        display.updateAmount(125);
+        Assert.assertEquals("$1.25", display.getMessage());
     }
 }

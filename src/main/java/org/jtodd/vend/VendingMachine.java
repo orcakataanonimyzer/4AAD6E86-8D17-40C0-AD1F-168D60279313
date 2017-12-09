@@ -8,13 +8,13 @@ public class VendingMachine {
 
     private final String INSERT_COIN = "INSERT COIN";
     private CurrencyAcceptor acceptor;
-    private String display;
+    private Display display;
     private int depositedAmount;
     private List<Coin> returnedCoins;
 
     public VendingMachine() {
         acceptor = new CurrencyAcceptor();
-        display = INSERT_COIN;
+        display = new Display();
         depositedAmount = 0;
         returnedCoins = new ArrayList<>();
     }
@@ -23,14 +23,14 @@ public class VendingMachine {
         Optional<Currency> testResult = acceptor.accept(coin);
         if (testResult.isPresent()) {
             depositedAmount += testResult.get().value;
-            display = String.format("$%.2f", ((double) depositedAmount / 100));
+            display.updateAmount(depositedAmount);
         } else {
             returnedCoins.add(coin);
         }
     }
 
     public String getDisplay() {
-        return display;
+        return display.getMessage();
     }
 
     public List<Coin> getReturnedCoins() {
