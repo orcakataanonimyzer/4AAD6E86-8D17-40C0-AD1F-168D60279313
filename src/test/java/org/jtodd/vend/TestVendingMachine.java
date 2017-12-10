@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 public class TestVendingMachine {
@@ -52,8 +53,8 @@ public class TestVendingMachine {
         Assert.assertEquals("$0.40", machine.getDisplay());
 
         // He digs in his pocket and finds another dime. When he inserts it and chooses
-        // chips again, a bag of chips is dispensed. The display says "THANK YOU" and theN
-        // resets to default.
+        // chips again, a bag of chips is dispensed. The display says "THANK YOU" and then
+        // resets to default. There is still no change in the coin return.
         machine.accept(new Coin(Currency.DIME));
         machine.select(ProductExample.CHIPS);
         Collection<Product> dispensedProduct = machine.getPurchasedProduct();
@@ -61,6 +62,7 @@ public class TestVendingMachine {
         Assert.assertEquals(ProductExample.CHIPS, dispensedProduct.iterator().next().type);
         Assert.assertEquals(Display.THANK_YOU, machine.getDisplay());
         Assert.assertEquals(Display.INSERT_COIN, machine.getDisplay());
+        Assert.assertArrayEquals(new Coin [] {}, machine.getReturnedCoins().toArray());
     }
 
     @Test
@@ -75,5 +77,53 @@ public class TestVendingMachine {
         machine.accept(dime);
         Assert.assertEquals("$0.15", machine.getDisplay());
         Assert.assertArrayEquals(new Coin [] {penny}, machine.getReturnedCoins().toArray());
+    }
+
+    @Test
+    public void testCanMakeChange() {
+        Collection<Product> dispensedProduct;
+        // John wants candy but only has three quarters. When he inserts them and selects candy
+        // he gets it and gets his change in the coin return.
+        IntStream.rangeClosed(1, 3).forEach(i -> machine.accept(new Coin(Currency.QUARTER)));
+        machine.select(ProductExample.CANDY);
+        dispensedProduct = machine.getPurchasedProduct();
+        Assert.assertEquals(1, dispensedProduct.size());
+        Assert.assertEquals(ProductExample.CANDY, dispensedProduct.iterator().next().type);
+        Assert.assertArrayEquals(new Coin [] {new Coin(Currency.DIME)}, machine.getReturnedCoins().toArray());
+
+        // He takes his change, eats his candy, and leaves.
+        machine.getReturnedCoins().clear();
+        machine.getPurchasedProduct().clear();
+
+        // The next day he wants chips and has a quarter and three dimes. He receives a nickel in change.
+        IntStream.rangeClosed(1, 3).forEach(i -> machine.accept(new Coin(Currency.DIME)));
+        machine.accept(new Coin(Currency.QUARTER));
+        machine.select(ProductExample.CHIPS);
+        dispensedProduct = machine.getPurchasedProduct();
+        Assert.assertEquals(1, dispensedProduct.size());
+        Assert.assertEquals(ProductExample.CHIPS, dispensedProduct.iterator().next().type);
+        Assert.assertArrayEquals(new Coin [] {new Coin(Currency.NICKEL)}, machine.getReturnedCoins().toArray());
+    }
+
+    @Test
+    public void testMakeChangeValidAmount() {
+        Set<Coin> change;
+        change = machine.makeChange(10);
+        Assert.assertArrayEquals(new Coin [] {new Coin(Currency.DIME)}, change.toArray());
+        change = machine.makeChange(5);
+        Assert.assertArrayEquals(new Coin [] {new Coin(Currency.NICKEL)}, change.toArray());
+
+    }
+
+    @Test
+    public void testMakeChangeInvalidAmount() {
+        try {
+            machine.makeChange(-1);
+            Assert.fail("Should have failed on attmept to make change for negative amount");
+        } catch (IllegalArgumentException e) {}
+        try {
+            machine.makeChange(1);
+            Assert.fail("Should have failed on attmept to make change for amount not divisible by 5");
+        } catch (IllegalArgumentException e) {}
     }
 }

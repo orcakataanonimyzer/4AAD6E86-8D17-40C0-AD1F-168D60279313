@@ -19,4 +19,13 @@ public class TestCoin {
         Assert.assertEquals(Currency.PENNY.diameter, coin.diameter, 1e-6);
         Assert.assertEquals(Currency.PENNY.mass, coin.mass, 1e-6);
     }
+
+    @Test
+    public void testEquals() {
+        Coin n1 = new Coin(Currency.NICKEL);
+        Coin n2 = new Coin(Currency.NICKEL);
+        Coin d  = new Coin(Currency.DIME);
+        Assert.assertEquals(n1, n2);
+        Assert.assertNotEquals(n1, d);
+    }
 }

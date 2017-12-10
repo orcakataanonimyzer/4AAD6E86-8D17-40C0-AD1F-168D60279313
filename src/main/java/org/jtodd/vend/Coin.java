@@ -16,4 +16,16 @@ public class Coin {
     public Coin(Currency currency) {
         this(currency.diameter, currency.mass);
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (!(other instanceof Coin)) {
+            return false;
+        }
+        Coin otherCoin = (Coin) other;
+        return this.diameter == otherCoin.diameter && this.mass == otherCoin.mass;
+    }
 }
