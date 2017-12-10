@@ -6,12 +6,10 @@ import org.junit.Test;
 
 public class TestDisplay {
 
-    private VendingMachine machine;
     private Display display;
 
     @Before
     public void setUp() {
-        machine = new VendingMachine();
         display = new Display();
     }
 
@@ -26,5 +24,11 @@ public class TestDisplay {
         Assert.assertEquals("$0.05", display.getMessage());
         display.updateAmount(125);
         Assert.assertEquals("$1.25", display.getMessage());
+    }
+
+    @Test
+    public void testDisplayCorrectAmountWhenResetToZero() {
+        display.updateAmount(0);
+        Assert.assertEquals(display.INSERT_COIN, display.getMessage());
     }
 }

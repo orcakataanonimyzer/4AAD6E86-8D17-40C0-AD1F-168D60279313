@@ -1,6 +1,7 @@
 package org.jtodd.vend;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 
 public class VendingMachine {
@@ -8,13 +9,15 @@ public class VendingMachine {
     private final String INSERT_COIN = "INSERT COIN";
     private CurrencyAcceptor acceptor;
     private Display display;
-    private int depositedAmount;
     private CoinReturn returnedCoins;
+    private ProductDispenser dispenser;
+    private int depositedAmount;
 
     public VendingMachine() {
         acceptor = new CurrencyAcceptor();
         display = new Display();
         returnedCoins = new CoinReturn();
+        dispenser = new ProductDispenser();
         depositedAmount = 0;
     }
 
@@ -28,11 +31,23 @@ public class VendingMachine {
         }
     }
 
+    public void select(ProductExample example) {
+        if (depositedAmount >= example.price) {
+            depositedAmount -= example.price;
+            display.updateAmount(depositedAmount);
+            dispenser.add(new Product(example));
+        }
+    }
+
     public String getDisplay() {
         return display.getMessage();
     }
 
     public Collection<Coin> getReturnedCoins() {
         return returnedCoins.getReturnedCoins();
+    }
+
+    public Collection<Product> getPurchasedProduct() {
+        return dispenser.getDispensedProducts();
     }
 }

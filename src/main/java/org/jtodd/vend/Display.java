@@ -14,10 +14,10 @@ public class Display {
     }
 
     public void updateAmount(int amount) {
-        message = String.format("$%.2f", ((double) amount / 100));
-    }
-
-    public void reset() {
-        message = INSERT_COIN;
+        if (amount == 0) {
+            message = INSERT_COIN;
+        } else {
+            message = String.format("$%.2f", ((double) amount / 100));
+        }
     }
 }
