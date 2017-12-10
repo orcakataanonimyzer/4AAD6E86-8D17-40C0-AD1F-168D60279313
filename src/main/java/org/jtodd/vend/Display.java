@@ -4,13 +4,22 @@ public class Display {
 
     public static final String INSERT_COIN = "INSERT COIN";
     private String message;
+    private String alternateMessage;
+    private int alternateMessageRepetitions;
 
     public Display() {
         message = INSERT_COIN;
+        alternateMessage = "";
+        alternateMessageRepetitions = 0;
     }
 
     public String getMessage() {
-        return message;
+        if (alternateMessageRepetitions > 0) {
+            --alternateMessageRepetitions;
+            return alternateMessage;
+        } else {
+            return message;
+        }
     }
 
     public void updateAmount(int amount) {
@@ -19,5 +28,17 @@ public class Display {
         } else {
             message = String.format("$%.2f", ((double) amount / 100));
         }
+    }
+
+    public void setMessageAndExpiration(String alternateMessage, int alternateMessageRepetitions) {
+        if (alternateMessageRepetitions < 0) {
+            throw new IllegalArgumentException("Alternate message cannot be set with negative number of repetitions: " + alternateMessageRepetitions);
+        }
+        this.alternateMessage = alternateMessage;
+        this.alternateMessageRepetitions = alternateMessageRepetitions;
+    }
+
+    public void displayPrice(ProductExample example) {
+        setMessageAndExpiration(String.format("Price: $%.2f", ((double) example.price) / 100), 1);
     }
 }

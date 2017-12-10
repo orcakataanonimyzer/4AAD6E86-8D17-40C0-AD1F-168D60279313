@@ -29,7 +29,7 @@ public class TestVendingMachine {
         // cost, but the machine does not give him a product. The next time he checks
         // the display the default message is shown.
         machine.select(ProductExample.CHIPS);
-//        Assert.assertEquals("Price: $0.50", machine.getDisplay());
+        Assert.assertEquals("Price: $0.50", machine.getDisplay());
         Assert.assertEquals(Display.INSERT_COIN, machine.getDisplay());
         Assert.assertArrayEquals(new Product[] {}, machine.getPurchasedProduct().toArray());
 
@@ -47,7 +47,7 @@ public class TestVendingMachine {
         // him the price and no product is dispensed. The next time he checks the display,
         // it shows him how much he has deposited.
         machine.select(ProductExample.CHIPS);
-//        Assert.assertEquals("Price: $0.50", machine.getDisplay());
+        Assert.assertEquals("Price: $0.50", machine.getDisplay());
         Assert.assertArrayEquals(new Product[] {}, machine.getPurchasedProduct().toArray());
         Assert.assertEquals("$0.40", machine.getDisplay());
 

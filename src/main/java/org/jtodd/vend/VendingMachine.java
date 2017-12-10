@@ -1,7 +1,6 @@
 package org.jtodd.vend;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
 public class VendingMachine {
@@ -36,6 +35,8 @@ public class VendingMachine {
             depositedAmount -= example.price;
             display.updateAmount(depositedAmount);
             dispenser.add(new Product(example));
+        } else {
+            display.displayPrice(example);
         }
     }
 
