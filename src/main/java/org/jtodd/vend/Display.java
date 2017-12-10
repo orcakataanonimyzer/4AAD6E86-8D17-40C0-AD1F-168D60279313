@@ -3,6 +3,7 @@ package org.jtodd.vend;
 public class Display {
 
     public static final String INSERT_COIN = "INSERT COIN";
+    public static final String THANK_YOU = "THANK YOU";
     private String message;
     private String alternateMessage;
     private int alternateMessageRepetitions;

@@ -52,12 +52,14 @@ public class TestVendingMachine {
         Assert.assertEquals("$0.40", machine.getDisplay());
 
         // He digs in his pocket and finds another dime. When he inserts it and chooses
-        // chips again, a bag of chips is dispensed and the display resets to default.
+        // chips again, a bag of chips is dispensed. The display says "THANK YOU" and theN
+        // resets to default.
         machine.accept(new Coin(Currency.DIME));
         machine.select(ProductExample.CHIPS);
         Collection<Product> dispensedProduct = machine.getPurchasedProduct();
         Assert.assertEquals(1, dispensedProduct.size());
         Assert.assertEquals(ProductExample.CHIPS, dispensedProduct.iterator().next().type);
+        Assert.assertEquals(Display.THANK_YOU, machine.getDisplay());
         Assert.assertEquals(Display.INSERT_COIN, machine.getDisplay());
     }
 

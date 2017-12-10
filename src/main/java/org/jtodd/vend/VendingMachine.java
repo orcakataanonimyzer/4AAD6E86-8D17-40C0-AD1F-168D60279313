@@ -34,6 +34,7 @@ public class VendingMachine {
         if (depositedAmount >= example.price) {
             depositedAmount -= example.price;
             display.updateAmount(depositedAmount);
+            display.setMessageAndExpiration(Display.THANK_YOU, 1);
             dispenser.add(new Product(example));
         } else {
             display.displayPrice(example);
