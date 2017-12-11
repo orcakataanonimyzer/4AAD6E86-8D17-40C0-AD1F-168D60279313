@@ -70,4 +70,19 @@ public class TestDisplay {
         Assert.assertEquals(String.format("Price: $%.2f", ((double) ProductExample.CHIPS.price) / 100), display.getMessage());
         Assert.assertEquals("$0.65", display.getMessage());
     }
+
+    @Test
+    public void testSoldOutThenDefault() {
+        display.displaySoldOut();
+        Assert.assertEquals(Display.SOLD_OUT, display.getMessage());
+        Assert.assertEquals(Display.INSERT_COIN, display.getMessage());
+    }
+
+    @Test
+    public void testDisplaySoldOutAndThenDepositedAmount() {
+        display.updateAmount(65);
+        display.displaySoldOut();
+        Assert.assertEquals(Display.SOLD_OUT, display.getMessage());
+        Assert.assertEquals("$0.65", display.getMessage());
+    }
 }

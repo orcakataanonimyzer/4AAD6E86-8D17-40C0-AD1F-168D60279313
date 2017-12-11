@@ -1,7 +1,6 @@
 package org.jtodd.vend;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -17,14 +16,20 @@ public class VendingMachine {
     private ProductDispenser dispenser;
     private Map<Coin, Currency> depositedCoins;
     private int depositedAmount;
+    private Map<ProductExample, Integer> inventory;
 
     public VendingMachine() {
+        this(makeDefaultInventory());
+    }
+
+    public VendingMachine(Map<ProductExample, Integer> inventory) {
         acceptor = new CurrencyAcceptor();
         display = new Display();
         returnedCoins = new CoinReturn();
         dispenser = new ProductDispenser();
         depositedCoins = new HashMap<>();
         depositedAmount = 0;
+        this.inventory = inventory;
     }
 
     public void accept(Coin coin) {
@@ -43,7 +48,9 @@ public class VendingMachine {
     }
 
     public void select(ProductExample example) {
-        if (depositedAmount >= example.price) {
+        if (inventory.get(example) < 1) {
+            display.displaySoldOut();
+        } else if (depositedAmount >= example.price) {
             Set<Coin> change = makeChange(depositedAmount - example.price);
             for (Coin c : change) {
                 returnedCoins.add(c);
@@ -52,6 +59,7 @@ public class VendingMachine {
             display.updateAmount(depositedAmount);
             display.setMessageAndExpiration(Display.THANK_YOU, 1);
             dispenser.add(new Product(example));
+            inventory.put(example, inventory.get(example) - 1);
         } else {
             display.displayPrice(example);
         }
@@ -104,4 +112,13 @@ public class VendingMachine {
         }
          return change;
     }
+
+    public static Map<ProductExample, Integer> makeDefaultInventory() {
+        HashMap<ProductExample, Integer> inventory = new HashMap<>();
+        inventory.put(ProductExample.CHIPS, 20);
+        inventory.put(ProductExample.CANDY, 20);
+        inventory.put(ProductExample.COLA, 20);
+        return inventory;
+    }
+
 }

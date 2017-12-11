@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.IntStream;
 
@@ -119,5 +120,23 @@ public class FunctionalTests {
         machine.cancel();
         Assert.assertEquals(4, machine.getReturnedCoins().size());
         Assert.assertEquals(Display.INSERT_COIN, machine.getDisplay());
+    }
+
+    @Test
+    public void testDisplaysMessageWhenOutOfProduct() {
+        // The vending machine is nearly empty. The previous customer gets the last bag of chips. When
+        // John tries to buy another one, he sees a message saying the machine is out. The display then
+        // changes to the amount he has deposited.
+        HashMap<ProductExample, Integer> inventory = new HashMap();
+        inventory.put(ProductExample.CHIPS, 1);
+        machine = new VendingMachine(inventory);
+        machine.accept(new Coin(Currency.QUARTER)); machine.accept(new Coin(Currency.QUARTER));
+        machine.select(ProductExample.CHIPS);
+        machine.getPurchasedProduct().clear();
+        machine.accept(new Coin(Currency.QUARTER)); machine.accept(new Coin(Currency.QUARTER));
+        machine.select(ProductExample.CHIPS);
+        Assert.assertArrayEquals(new Product [] {}, machine.getPurchasedProduct().toArray());
+        Assert.assertEquals(Display.SOLD_OUT, machine.getDisplay());
+        Assert.assertEquals("$0.50", machine.getDisplay());
     }
 }
