@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 
 public class TestVendingMachine {
@@ -47,7 +49,7 @@ public class TestVendingMachine {
         machine.accept(q2);
         machine.accept(d1);
         machine.accept(new Coin(Currency.PENNY));
-        Assert.assertArrayEquals(new Coin [] {q1, q2, d1}, machine.getDepositedCoins().keySet().toArray());
+        Assert.assertTrue(Coin.compareCoinLists(Arrays.asList(new Coin [] {q1, q2, d1}), new ArrayList<>(machine.getDepositedCoins().keySet())));
     }
 
     @Test

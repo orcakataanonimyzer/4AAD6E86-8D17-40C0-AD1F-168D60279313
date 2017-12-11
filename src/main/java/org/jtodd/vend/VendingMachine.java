@@ -79,11 +79,17 @@ public class VendingMachine {
     }
 
     public Collection<Coin> getReturnedCoins() {
-        return returnedCoins.getReturnedCoins();
+        Set<Coin> coins = new HashSet<>();
+        coins.addAll(returnedCoins.getReturnedCoins());
+        returnedCoins.clear();
+        return coins;
     }
 
     public Collection<Product> getPurchasedProduct() {
-        return dispenser.getDispensedProducts();
+        Set<Product> dispensed = new HashSet<>();
+        dispensed.addAll(dispenser.getDispensedProducts());
+        dispenser.getDispensedProducts().clear();
+        return dispensed;
     }
 
     public Map<Coin, Currency> getDepositedCoins() {
@@ -120,5 +126,4 @@ public class VendingMachine {
         inventory.put(ProductExample.COLA, 20);
         return inventory;
     }
-
 }

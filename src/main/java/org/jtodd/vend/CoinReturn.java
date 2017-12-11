@@ -22,4 +22,8 @@ public class CoinReturn {
     public Collection<Coin> getReturnedCoins() {
         return returnedCoins;
     }
+
+    public void clear() {
+            returnedCoins.clear();
+    }
 }

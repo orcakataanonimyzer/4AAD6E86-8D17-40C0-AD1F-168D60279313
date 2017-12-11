@@ -4,7 +4,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -78,6 +81,7 @@ public class FunctionalTests {
         machine.accept(dime);
         Assert.assertEquals("$0.15", machine.getDisplay());
         Assert.assertArrayEquals(new Coin [] {penny}, machine.getReturnedCoins().toArray());
+        Assert.assertTrue(Coin.compareCoinLists(Arrays.asList(new Coin[] {nickel, dime}), new ArrayList(machine.getDepositedCoins().keySet())));
     }
 
     @Test
@@ -92,13 +96,7 @@ public class FunctionalTests {
         dispensedProduct = machine.getPurchasedProduct();
         Assert.assertEquals(1, dispensedProduct.size());
         Assert.assertEquals(ProductExample.CANDY, dispensedProduct.iterator().next().type);
-        change = machine.getReturnedCoins();
-        Assert.assertEquals(1, change.size());
-        Assert.assertEquals(Currency.DIME, Currency.getByCoin(change.iterator().next()));
-
-        // He takes his change, eats his candy, and leaves.
-        machine.getReturnedCoins().clear();
-        machine.getPurchasedProduct().clear();
+        Assert.assertTrue(Coin.compareCoinLists(Arrays.asList(new Coin [] {new Coin(Currency.DIME)}), new ArrayList(machine.getReturnedCoins())));
 
         // The next day he wants chips and has a quarter and three dimes. He receives a nickel in change.
         IntStream.rangeClosed(1, 3).forEach(i -> machine.accept(new Coin(Currency.DIME)));
@@ -107,9 +105,7 @@ public class FunctionalTests {
         dispensedProduct = machine.getPurchasedProduct();
         Assert.assertEquals(1, dispensedProduct.size());
         Assert.assertEquals(ProductExample.CHIPS, dispensedProduct.iterator().next().type);
-        change = machine.getReturnedCoins();
-        Assert.assertEquals(1, change.size());
-        Assert.assertEquals(Currency.NICKEL, Currency.getByCoin(change.iterator().next()));
+        Assert.assertTrue(Coin.compareCoinLists(Arrays.asList(new Coin [] {new Coin(Currency.NICKEL)}), new ArrayList(machine.getReturnedCoins())));
     }
 
     @Test
