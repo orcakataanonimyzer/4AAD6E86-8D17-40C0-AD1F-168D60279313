@@ -2,7 +2,9 @@ package org.jtodd.vend;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -13,6 +15,7 @@ public class VendingMachine {
     private Display display;
     private CoinReturn returnedCoins;
     private ProductDispenser dispenser;
+    private Map<Coin, Currency> depositedCoins;
     private int depositedAmount;
 
     public VendingMachine() {
@@ -20,13 +23,19 @@ public class VendingMachine {
         display = new Display();
         returnedCoins = new CoinReturn();
         dispenser = new ProductDispenser();
+        depositedCoins = new HashMap<>();
         depositedAmount = 0;
     }
 
     public void accept(Coin coin) {
+        if (depositedCoins.containsKey(coin)) {
+            throw new IllegalArgumentException("Cannot insert the same coin more than once");
+        }
         Optional<Currency> testResult = acceptor.accept(coin);
         if (testResult.isPresent()) {
-            depositedAmount += testResult.get().value;
+            Currency c = testResult.get();
+            depositedCoins.put(coin, c);
+            depositedAmount += c.value;
             display.updateAmount(depositedAmount);
         } else {
             returnedCoins.add(coin);
@@ -48,6 +57,15 @@ public class VendingMachine {
         }
     }
 
+    public void cancel() {
+        for (Coin c : depositedCoins.keySet()) {
+            returnedCoins.add(c);
+        }
+        depositedCoins.clear();
+        depositedAmount = 0;
+        display.updateAmount(depositedAmount);
+    }
+
     public String getDisplay() {
         return display.getMessage();
     }
@@ -58,6 +76,10 @@ public class VendingMachine {
 
     public Collection<Product> getPurchasedProduct() {
         return dispenser.getDispensedProducts();
+    }
+
+    public Map<Coin, Currency> getDepositedCoins() {
+        return depositedCoins;
     }
 
     public Set<Coin> makeChange(int amount) {

@@ -17,15 +17,9 @@ public class Coin {
         this(currency.diameter, currency.mass);
     }
 
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-        if (!(other instanceof Coin)) {
-            return false;
-        }
-        Coin otherCoin = (Coin) other;
-        return this.diameter == otherCoin.diameter && this.mass == otherCoin.mass;
+    public static boolean compare(Coin c1, Coin c2) {
+        Currency cr1 = Currency.getByCoin(c1);
+        Currency cr2 = Currency.getByCoin(c2);
+        return cr1 == cr2;
     }
 }
