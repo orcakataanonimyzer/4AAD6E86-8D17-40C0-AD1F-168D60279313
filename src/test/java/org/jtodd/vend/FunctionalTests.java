@@ -147,10 +147,23 @@ public class FunctionalTests {
         machine = new VendingMachine(VendingMachine.makeDefaultInventory(), bank);
         Assert.assertEquals(Display.EXACT_CHANGE_ONLY, machine.getDisplay());
 
-        // John shrugs and pays for his candy with 6 dimes and a nickel.
+        // Not trusting it, John inserts three quarters and selects candy. Nothing happens.
+        IntStream.rangeClosed(1, 3).forEach(i -> machine.accept(new Coin(Currency.QUARTER)));
+        machine.select(ProductExample.CANDY);
+        Assert.assertArrayEquals(new Product [] {}, machine.getPurchasedProduct().toArray());
+
+        // John hits the coin returns and collects his change. Then he tries again with
+        // 6 dimes and a nickel.
+        machine.cancel();
+        machine.getReturnedCoins();
         IntStream.rangeClosed(1, 6).forEach(i -> machine.accept(new Coin(Currency.DIME)));
         machine.accept(new Coin(Currency.NICKEL));
         machine.select(ProductExample.CANDY);
+        Collection<Product> dispensedProduct = machine.getPurchasedProduct();
+        Assert.assertEquals(1, dispensedProduct.size());
+        Assert.assertEquals(ProductExample.CANDY, dispensedProduct.iterator().next().type);
+        Assert.assertArrayEquals(new Coin [] {}, machine.getReturnedCoins().toArray());
+        Assert.assertEquals(Display.THANK_YOU, machine.getDisplay());
 
         // With its supply of dimes replenished, the INSERT COIN message is now displayed.
         Assert.assertEquals(Display.INSERT_COIN, machine.getDisplay());

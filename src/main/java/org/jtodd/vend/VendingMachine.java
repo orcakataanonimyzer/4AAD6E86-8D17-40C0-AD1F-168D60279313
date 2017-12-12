@@ -32,6 +32,9 @@ public class VendingMachine {
         this.inventory = inventory;
         this.bank = bank;
         depositedAmount = 0;
+        if (changeDepleted(bank)) {
+            display.setMessage(Display.EXACT_CHANGE_ONLY);
+        }
     }
 
     public void accept(Coin coin) {
@@ -52,13 +55,22 @@ public class VendingMachine {
     public void select(ProductExample example) {
         if (inventory.get(example) < 1) {
             display.displaySoldOut();
+        } else if (depositedAmount > example.price && changeDepleted(bank)) {
+            // Do nothing: display should already be showing EXACT CHANGE
         } else if (depositedAmount >= example.price) {
+            for (Map.Entry<Coin, Currency> e : depositedCoins.entrySet()) {
+                bank.put(e.getValue(), bank.get(e.getValue()) + 1);
+            }
             Set<Coin> change = makeChange(depositedAmount - example.price);
             for (Coin c : change) {
                 returnedCoins.add(c);
             }
             depositedAmount = 0;
-            display.updateAmount(depositedAmount);
+            if (changeDepleted(bank)) {
+                display.setMessage(Display.EXACT_CHANGE_ONLY);
+            } else {
+                display.setMessage(Display.INSERT_COIN);
+            }
             display.setMessageAndExpiration(Display.THANK_YOU, 1);
             dispenser.add(new Product(example));
             inventory.put(example, inventory.get(example) - 1);
@@ -108,14 +120,17 @@ public class VendingMachine {
         Set<Coin> change = new HashSet<>();
         while (amount >= 25) {
             change.add(new Coin(Currency.QUARTER));
+            bank.put(Currency.QUARTER, bank.get(Currency.QUARTER) - 1);
             amount -= 25;
         }
         while (amount >= 10) {
             change.add(new Coin(Currency.DIME));
+            bank.put(Currency.DIME, bank.get(Currency.DIME) - 1);
             amount -= 10;
         }
         while (amount > 0) {
             change.add(new Coin(Currency.NICKEL));
+            bank.put(Currency.NICKEL, bank.get(Currency.NICKEL) - 1);
             amount -= 5;
         }
          return change;
@@ -135,5 +150,9 @@ public class VendingMachine {
         bank.put(Currency.DIME, 20);
         bank.put(Currency.QUARTER, 20);
         return bank;
+    }
+
+    public static boolean changeDepleted(Map<Currency, Integer> bank) {
+        return bank.values().stream().anyMatch(i -> i == 0);
     }
 }

@@ -33,6 +33,10 @@ public class Display {
         }
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public void setMessageAndExpiration(String alternateMessage, int alternateMessageRepetitions) {
         if (alternateMessageRepetitions < 0) {
             throw new IllegalArgumentException("Alternate message cannot be set with negative number of repetitions: " + alternateMessageRepetitions);
