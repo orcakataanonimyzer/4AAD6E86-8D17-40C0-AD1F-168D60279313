@@ -125,7 +125,7 @@ public class FunctionalTests {
         // changes to the amount he has deposited.
         HashMap<ProductExample, Integer> inventory = new HashMap();
         inventory.put(ProductExample.CHIPS, 1);
-        machine = new VendingMachine(inventory);
+        machine = new VendingMachine(inventory, VendingMachine.makeDefaultBank());
         machine.accept(new Coin(Currency.QUARTER)); machine.accept(new Coin(Currency.QUARTER));
         machine.select(ProductExample.CHIPS);
         machine.getPurchasedProduct().clear();
@@ -134,5 +134,25 @@ public class FunctionalTests {
         Assert.assertArrayEquals(new Product [] {}, machine.getPurchasedProduct().toArray());
         Assert.assertEquals(Display.SOLD_OUT, machine.getDisplay());
         Assert.assertEquals("$0.50", machine.getDisplay());
+    }
+
+    @Test
+    public void testDisplaysExactChangeOnly() {
+        // Lots of people have been depositing quarters and buying candy, so the dime supply is gone
+        // When John attempts to buy candy, he is informed he can only do it with exact change.
+        HashMap<Currency, Integer> bank = new HashMap<>();
+        bank.put(Currency.NICKEL, 20);
+        bank.put(Currency.DIME, 0);
+        bank.put(Currency.QUARTER, 20);
+        machine = new VendingMachine(VendingMachine.makeDefaultInventory(), bank);
+        Assert.assertEquals(Display.EXACT_CHANGE_ONLY, machine.getDisplay());
+
+        // John shrugs and pays for his candy with 6 dimes and a nickel.
+        IntStream.rangeClosed(1, 6).forEach(i -> machine.accept(new Coin(Currency.DIME)));
+        machine.accept(new Coin(Currency.NICKEL));
+        machine.select(ProductExample.CANDY);
+
+        // With its supply of dimes replenished, the INSERT COIN message is now displayed.
+        Assert.assertEquals(Display.INSERT_COIN, machine.getDisplay());
     }
 }

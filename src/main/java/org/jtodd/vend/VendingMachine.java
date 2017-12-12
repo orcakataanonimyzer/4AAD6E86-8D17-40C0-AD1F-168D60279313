@@ -15,21 +15,23 @@ public class VendingMachine {
     private CoinReturn returnedCoins;
     private ProductDispenser dispenser;
     private Map<Coin, Currency> depositedCoins;
+    private Map<Currency, Integer> bank;
     private int depositedAmount;
     private Map<ProductExample, Integer> inventory;
 
     public VendingMachine() {
-        this(makeDefaultInventory());
+        this(makeDefaultInventory(), makeDefaultBank());
     }
 
-    public VendingMachine(Map<ProductExample, Integer> inventory) {
+    public VendingMachine(Map<ProductExample, Integer> inventory, Map<Currency, Integer> bank) {
         acceptor = new CurrencyAcceptor();
         display = new Display();
         returnedCoins = new CoinReturn();
         dispenser = new ProductDispenser();
         depositedCoins = new HashMap<>();
-        depositedAmount = 0;
         this.inventory = inventory;
+        this.bank = bank;
+        depositedAmount = 0;
     }
 
     public void accept(Coin coin) {
@@ -125,5 +127,13 @@ public class VendingMachine {
         inventory.put(ProductExample.CANDY, 20);
         inventory.put(ProductExample.COLA, 20);
         return inventory;
+    }
+
+    public static Map<Currency, Integer> makeDefaultBank() {
+        HashMap<Currency, Integer> bank = new HashMap<>();
+        bank.put(Currency.NICKEL, 20);
+        bank.put(Currency.DIME, 20);
+        bank.put(Currency.QUARTER, 20);
+        return bank;
     }
 }
