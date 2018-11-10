@@ -81,7 +81,7 @@ public class FunctionalTests {
         machine.accept(dime);
         Assert.assertEquals("$0.15", machine.getDisplay());
         Assert.assertArrayEquals(new Coin [] {penny}, machine.getReturnedCoins().toArray());
-        Assert.assertTrue(Coin.compareCoinLists(Arrays.asList(new Coin[] {nickel, dime}), new ArrayList(machine.getDepositedCoins().keySet())));
+        Assert.assertTrue(Coin.compareCoinLists(Arrays.asList(new Coin[] {nickel, dime}), new ArrayList<>(machine.getDepositedCoins().keySet())));
     }
 
     @Test
@@ -96,7 +96,7 @@ public class FunctionalTests {
         dispensedProduct = machine.getPurchasedProduct();
         Assert.assertEquals(1, dispensedProduct.size());
         Assert.assertEquals(ProductExample.CANDY, dispensedProduct.iterator().next().type);
-        Assert.assertTrue(Coin.compareCoinLists(Arrays.asList(new Coin [] {new Coin(Currency.DIME)}), new ArrayList(machine.getReturnedCoins())));
+        Assert.assertTrue(Coin.compareCoinLists(Arrays.asList(new Coin [] {new Coin(Currency.DIME)}), new ArrayList<>(machine.getReturnedCoins())));
 
         // The next day he wants chips and has a quarter and three dimes. He receives a nickel in change.
         IntStream.rangeClosed(1, 3).forEach(i -> machine.accept(new Coin(Currency.DIME)));
@@ -105,7 +105,7 @@ public class FunctionalTests {
         dispensedProduct = machine.getPurchasedProduct();
         Assert.assertEquals(1, dispensedProduct.size());
         Assert.assertEquals(ProductExample.CHIPS, dispensedProduct.iterator().next().type);
-        Assert.assertTrue(Coin.compareCoinLists(Arrays.asList(new Coin [] {new Coin(Currency.NICKEL)}), new ArrayList(machine.getReturnedCoins())));
+        Assert.assertTrue(Coin.compareCoinLists(Arrays.asList(new Coin [] {new Coin(Currency.NICKEL)}), new ArrayList<>(machine.getReturnedCoins())));
     }
 
     @Test
@@ -123,7 +123,7 @@ public class FunctionalTests {
         // The vending machine is nearly empty. The previous customer gets the last bag of chips. When
         // John tries to buy another one, he sees a message saying the machine is out. The display then
         // changes to the amount he has deposited.
-        HashMap<ProductExample, Integer> inventory = new HashMap();
+        HashMap<ProductExample, Integer> inventory = new HashMap<>();
         inventory.put(ProductExample.CHIPS, 1);
         machine = new VendingMachine(inventory, VendingMachine.makeDefaultBank());
         machine.accept(new Coin(Currency.QUARTER)); machine.accept(new Coin(Currency.QUARTER));
